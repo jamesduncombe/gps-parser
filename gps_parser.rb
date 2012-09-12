@@ -5,19 +5,25 @@
 # Conversion of Coordinates
 module GPS
 
-  # class methods
-  def self.get_longitude lng, d
-    lng = -lng if d == 'W'
+  # method to convert the longitude from degrees, minutes, seconds, heading to decimal
+  def self.parse_longitude longitude, heading
+    lng = -lng if heading == 'W'
     degrees = (lng/100).to_i
     minutes = lng - (degrees*100)
     degrees + (minutes/60)
   end
 
-  def self.get_latitude lat, d
-    lat = -lat if d == 'S'
+  # method to convert the latitude from degrees, minutes, seconds, heading to decimal
+  def self.parse_latitude latitude, heading
+    lat = -lat if heading == 'S'
     degrees = (lat/100).to_i
     minutes = lat - (degrees*100)
     degrees + (minutes/60)
+  end
+
+  # method to parse the time from the GPS string
+  def self.parse_time time_string
+    time_string
   end
 
   # Record model
@@ -59,9 +65,9 @@ module GPS
       @f.readlines.each do |l|
         a = l.split(',')
         @records << GPS::Record.new(
-          :time =>       a[1],
-          :longitude =>  GPS::get_longitude(a[2].to_f,a[3]),
-          :latitude =>   GPS::get_latitude(a[4].to_f,a[5]),
+          :time =>       GPS::parse_time(a[1]),
+          :longitude =>  GPS::parse_longitude(a[2].to_f,a[3]),
+          :latitude =>   GPS::parse_latitude(a[4].to_f,a[5]),
           :satellites => a[7].to_i,
           :altitude =>   a[9].to_f
         )
