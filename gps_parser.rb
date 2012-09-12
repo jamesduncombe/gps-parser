@@ -7,23 +7,26 @@ module GPS
 
   # method to convert the longitude from degrees, minutes, seconds, heading to decimal
   def self.parse_longitude longitude, heading
-    lng = -lng if heading == 'W'
-    degrees = (lng/100).to_i
-    minutes = lng - (degrees*100)
+    longitude = -longitude if heading == 'W'
+    degrees = (longitude/100).to_i
+    minutes = longitude - (degrees*100)
     degrees + (minutes/60)
   end
 
   # method to convert the latitude from degrees, minutes, seconds, heading to decimal
   def self.parse_latitude latitude, heading
-    lat = -lat if heading == 'S'
-    degrees = (lat/100).to_i
-    minutes = lat - (degrees*100)
+    latitude = -latitude if heading == 'S'
+    degrees = (latitude/100).to_i
+    minutes = latitude - (degrees*100)
     degrees + (minutes/60)
   end
 
   # method to parse the time from the GPS string
-  def self.parse_time time_string
-    time_string
+  def self.parse_time ctime, time_string
+    hour   = time_string[0,2].to_i
+    minute = time_string[2,2].to_i
+    second = time_string[4,2].to_i
+    Time.new ctime.year, ctime.month, ctime.day, hour, minute, second
   end
 
   # Record model
@@ -65,11 +68,11 @@ module GPS
       @f.readlines.each do |l|
         a = l.split(',')
         @records << GPS::Record.new(
-          :time =>       GPS::parse_time(a[1]),
-          :longitude =>  GPS::parse_longitude(a[2].to_f,a[3]),
-          :latitude =>   GPS::parse_latitude(a[4].to_f,a[5]),
+          :time       => GPS::parse_time(@f.ctime, a[1]),
+          :longitude  => GPS::parse_longitude(a[2].to_f, a[3]),
+          :latitude   => GPS::parse_latitude(a[4].to_f, a[5]),
           :satellites => a[7].to_i,
-          :altitude =>   a[9].to_f
+          :altitude   => a[9].to_f
         )
       end
     end
