@@ -8,16 +8,16 @@ module GPS
   # method to convert the longitude from degrees, minutes, seconds, heading to decimal
   def self.parse_longitude longitude, heading
     longitude = -longitude if heading == 'W'
-    degrees = (longitude/100).to_i
-    minutes = longitude - (degrees*100)
+    degrees = (longitude.to_f/100).to_i
+    minutes = longitude.to_f - (degrees*100)
     degrees + (minutes/60)
   end
 
   # method to convert the latitude from degrees, minutes, seconds, heading to decimal
   def self.parse_latitude latitude, heading
     latitude = -latitude if heading == 'S'
-    degrees = (latitude/100).to_i
-    minutes = latitude - (degrees*100)
+    degrees = (latitude.to_f/100).to_i
+    minutes = latitude.to_f - (degrees*100)
     degrees + (minutes/60)
   end
 
@@ -35,6 +35,7 @@ module GPS
     attr_accessor :time, :longitude, :latitude, :satellites, :altitude
 
     def initialize *args
+      raise ArgumentError, 'Please provide arguments: time, longitude, latitude, satellites and altitude.' unless args.any?
       args.first.each do |k,v|
         instance_variable_set("@#{k}", v) unless v.nil?
       end
@@ -69,8 +70,8 @@ module GPS
         a = l.split(',')
         @records << GPS::Record.new(
           :time       => GPS::parse_time(@f.ctime, a[1]),
-          :longitude  => GPS::parse_longitude(a[2].to_f, a[3]),
-          :latitude   => GPS::parse_latitude(a[4].to_f, a[5]),
+          :longitude  => GPS::parse_longitude(a[2], a[3]),
+          :latitude   => GPS::parse_latitude(a[4], a[5]),
           :satellites => a[7].to_i,
           :altitude   => a[9].to_f
         )
