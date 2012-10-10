@@ -1,7 +1,7 @@
 
 
 require 'rspec'
-require_relative '../gps_parser.rb'
+require_relative '../../lib/gps_parser.rb'
 
 describe 'GPS Parser' do
 
