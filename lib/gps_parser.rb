@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 #
 # Crazy class to play with some shizzle
 #
