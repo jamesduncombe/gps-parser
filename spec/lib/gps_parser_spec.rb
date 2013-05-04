@@ -1,5 +1,5 @@
 require 'rspec'
-require_relative '../../lib/gps_parser.rb'
+require 'gps_parser.rb'
 
 describe 'GPS Parser' do
 
@@ -20,7 +20,7 @@ describe 'GPS Parser' do
   describe 'Time Parser' do
 
     it 'should convert a GPS time into a proper Ruby time object' do
-      File.open 'test_gps_data.txt' do |f|
+      File.open 'spec/lib/test_gps_data.txt' do |f|
         result = GPS::parse_time f.ctime, '175055.354'
         result.should be_an_instance_of Time
       end
@@ -54,7 +54,7 @@ describe 'GPS Parser' do
   describe GPS::Parser do
 
     let(:parser) { GPS::Parser.new }
-    let(:load_gps_strings) { parser.load_gps_strings 'test_gps_data.txt' }
+    let(:load_gps_strings) { parser.load_gps_strings 'spec/lib/test_gps_data.txt' }
 
     it 'should initialize with a bare array of GPS records' do
       parser.records.should be_an Array
