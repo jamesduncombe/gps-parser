@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.version     = GPS::VERSION
 
   gem.authors     = ["James Duncombe"]
-  gem.email       = 'j@jdun.co'
+  gem.email       = 'james@jamesduncombe.com'
 
   gem.description = "Little gem to parse NMEA GPS strings"
   gem.summary     = "Parse NMEA GPS strings"
